@@ -54,12 +54,17 @@ npm test         # route smoke tests (vitest + jsdom)
 The build uses **relative asset paths** (`base: './'`) and **hash routing**, so it works on GitHub Pages
 without any server rewrite rules — both at `username.github.io/repo/` and on a custom domain.
 
-### Option A — GitHub Actions (included)
+> **One-time step required:** GitHub Pages must be switched on in the repository settings before the
+> deploy workflow can publish. Until then the workflow stops at the "configure-pages" step with
+> `Get Pages site failed` — the build itself still succeeds.
 
-1. Push this branch / merge to `main`.
-2. In the repository: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-3. The workflow in `.github/workflows/deploy.yml` builds and publishes automatically on every push.
-4. The deck is then at `https://<user>.github.io/<repo>/#/pitch` and the store at `.../#/`.
+1. Open **Settings → Pages** in the repository.
+2. Under **Build and deployment → Source**, choose **GitHub Actions**.
+3. Re-run the latest workflow, or push any commit to `main`.
+4. Live URLs (repo `thundermountdemo2`):
+   - Storefront: `https://pietechnologies.github.io/thundermountdemo2/`
+   - Proposal deck: `https://pietechnologies.github.io/thundermountdemo2/#/pitch`
+   - Scope document: `https://pietechnologies.github.io/thundermountdemo2/#/docs`
 
 ### Option B — Manual
 
