@@ -4,7 +4,7 @@ import {
   ArrowRight, Check, X, Printer, FileText, Database, Cloud, Lock, Layers, Wrench, ShoppingCart,
   Users, Handshake, LayoutDashboard, Smartphone, Globe, ShieldCheck, CircleDot, AlertCircle,
 } from 'lucide-react'
-import { phases, integrations, money } from '../data'
+import { adminActions, integrations } from '../data'
 
 const toc = [
   ['summary', '1. Summary'],
@@ -16,7 +16,7 @@ const toc = [
   ['arch', '7. Architecture'],
   ['integrations', '8. Integrations'],
   ['design', '9. Design system'],
-  ['plan', '10. Delivery plan'],
+  ['actions', '10. Admin actions'],
   ['accept', '11. Acceptance criteria'],
   ['launch', '12. Launch & migration'],
   ['assume', '13. Assumptions'],
@@ -147,7 +147,7 @@ export default function Docs() {
                 ['/checkout', 'Checkout', 'Contact → shipping → payment → confirmation', <Globe className="h-3.5 w-3.5" />],
                 ['/account', 'Customer dashboard', 'Orders, tracking, garage profile, installs, support', <Users className="h-3.5 w-3.5" />],
                 ['/dealer', 'Dealer portal', 'Dashboard, orders, quote pipeline, price list, inventory, jobs, terms', <Handshake className="h-3.5 w-3.5" />],
-                ['/admin', 'Owner console', 'KPIs, orders, inventory, dealers, installs, CMS, team & audit', <LayoutDashboard className="h-3.5 w-3.5" />],
+                ['/admin', 'Owner console', 'KPIs, action centre, orders, inventory, dealers, installs, CMS, team & audit', <LayoutDashboard className="h-3.5 w-3.5" />],
                 ['/field', 'Installer app', 'Route, checklist, photos, signature, close-out, offline state', <Smartphone className="h-3.5 w-3.5" />],
                 ['/today', 'Current vs proposed', 'Side-by-side audit of what exists today', <AlertCircle className="h-3.5 w-3.5" />],
               ].map(([route, name, desc, icon], i) => (
@@ -162,13 +162,18 @@ export default function Docs() {
 
           <section>
             <H2 id="scope" n="3">Scope of work</H2>
+            <p className="mt-3">Six connected areas make up the platform. Each one is demoed and signed off on its own before the next begins.</p>
             <div className="mt-4 space-y-3">
-              {phases.map((p) => (
+              {[
+                { n: '01', title: 'Storefront & marketing site', items: ['Design system + brand refresh', 'Product catalogue & fitment schema', 'Measure-to-mount tool on every PDP', 'Cart, checkout, shipping rules', 'Portfolio, blog, reviews and SEO'] },
+                { n: '02', title: 'Customer accounts & commerce', items: ['Accounts & garage profiles', 'Order history, tracking, reorders', 'Payments, tax and returns', 'Email & SMS lifecycle', 'Analytics baseline'] },
+                { n: '03', title: 'Dealer portal', items: ['Application & approval flow', 'Tiered pricing and Net 30 credit', 'Quotes, POs and bulk ordering', 'Co-branded catalogues', 'Lead routing by ZIP'] },
+                { n: '04', title: 'Owner console', items: ['Orders, refunds and RMAs', 'Inventory and price control', 'Dealer network management', 'Install scheduling & dispatch', 'Website CMS, roles and audit trail'] },
+                { n: '05', title: 'Installer app', items: ['Route and job detail', 'Guided checklist', 'Photo evidence & signature', 'Offline operation and sync', 'Job close-out and stock draw'] },
+                { n: '06', title: 'Reporting & integrations', items: ['Channel and dealer reporting', 'SKU performance and funnel', 'Payments, accounting, shipping', 'Email, SMS and CRM', 'Exports and scheduled digests'] },
+              ].map((p) => (
                 <div key={p.n} className="rounded-xl border border-line bg-panel p-5">
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <h3 className="text-[14px] font-bold"><span className="mr-2 text-bolt">{p.n}</span>{p.title}</h3>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-white/35">{p.weeks}</span>
-                  </div>
+                  <h3 className="text-[14px] font-bold"><span className="mr-2 text-bolt">{p.n}</span>{p.title}</h3>
                   <ul className="mt-2.5 grid gap-1.5 sm:grid-cols-2">
                     {p.items.map((i) => (
                       <li key={i} className="flex gap-2 text-[12px] text-white/55"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-bolt" /> {i}</li>
@@ -309,23 +314,31 @@ export default function Docs() {
           </section>
 
           <section>
-            <H2 id="plan" n="10">Delivery plan & milestones</H2>
-            <div className="mt-4 overflow-hidden rounded-xl border border-line">
-              {[
-                ['M1', 'End of week 3', 'Storefront and catalogue live on staging; you can buy a product end-to-end.'],
-                ['M2', 'End of week 6', 'Accounts, garage profiles, fitment tool and install booking complete.'],
-                ['M3', 'End of week 9', 'Dealer portal in pilot with 2 dealers; trade pricing verified.'],
-                ['M4', 'End of week 12', 'Admin console, inventory sync and installer app in field trial.'],
-                ['M5', 'End of week 14', 'Production launch, training delivered, hypercare starts.'],
-              ].map(([m, w, d], i) => (
-                <div key={m} className={`grid gap-2 px-4 py-3 sm:grid-cols-[60px_140px_1fr] sm:items-center ${i ? 'border-t border-line' : ''}`}>
-                  <div className="text-[12px] font-extrabold text-bolt">{m}</div>
-                  <div className="text-[11px] uppercase tracking-wider text-white/40">{w}</div>
-                  <div className="text-[12px] text-white/65">{d}</div>
+            <H2 id="actions" n="10">Admin actions</H2>
+            <p className="mt-3">
+              What staff can do in the owner console without a developer, a spreadsheet or an email to the office.
+              Every action is role-checked and written to the audit trail. The same list is clickable in the
+              demo's <Link to="/admin" className="text-bolt underline-offset-4 hover:underline">Action Centre</Link>.
+            </p>
+            <div className="mt-4 space-y-3">
+              {adminActions.map((g) => (
+                <div key={g.id} className="rounded-xl border border-line bg-panel p-5">
+                  <div className="flex flex-wrap items-baseline justify-between gap-2">
+                    <h3 className="text-[14px] font-bold">{g.group}</h3>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-white/30">{g.actions.length} actions</span>
+                  </div>
+                  <p className="mt-1 text-[12px] text-white/40">{g.blurb}</p>
+                  <ul className="mt-3 grid gap-x-6 gap-y-2 sm:grid-cols-2">
+                    {g.actions.map((a) => (
+                      <li key={a.name} className="text-[12px] text-white/55">
+                        <span className="font-semibold text-white/85">{a.name}</span>
+                        <span className="block text-[11px] leading-relaxed text-white/35">{a.detail}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               ))}
             </div>
-            <p className="mt-3 text-[12px] text-white/40">Demo each Friday, 30 minutes, with a clickable build. No phase is invoiced until you sign it off.</p>
           </section>
 
           <section>
@@ -355,7 +368,7 @@ export default function Docs() {
                 ['Redirects', 'A 1:1 map from every live Wix URL to its new equivalent, plus 301s for legacy pages, verified in staging.'],
                 ['DNS & cutover', 'Launch on a staging subdomain, verify checkout and tax, then switch DNS in a low-traffic window.'],
                 ['Training', 'Two live sessions (office + field) and recorded SOPs for orders, refunds, dealer approvals and content.'],
-                ['Hypercare', '30 days of daily checks, same-day bug fixes and a weekly performance report.'],
+                ['Hypercare', 'Daily checks after launch, same-day bug fixes and a weekly performance report.'],
                 ['Handover', 'Repository, environment access, credentials vault and a written runbook are transferred to you.'],
               ].map(([t, d]) => (
                 <div key={t} className="rounded-lg border border-line bg-panel p-4">
@@ -400,9 +413,9 @@ export default function Docs() {
                 ['Do we own the code?', 'Yes — repository, hosting and all accounts are transferred to Thunder Mounts at handover.'],
                 ['What happens to our product photography?', 'It migrates. We re-cut the images to the new aspect ratios and add alt text as part of Phase 1.'],
                 ['Can dealers see each other’s pricing?', 'No. Dealer users only ever see their own tier, orders and credit. That is enforced server-side, not just hidden in the UI.'],
-                ['What if we want to start smaller?', 'The "Storefront first" option delivers Phase 1–2 in six weeks and stands alone. The dealer portal can follow.'],
+                ['What if we want to start smaller?', 'Yes. The storefront and customer accounts stand alone as a first release, and the dealer portal can follow without rework.'],
                 ['How is the installer app distributed?', 'It is an installable PWA — no app store, no review delays, works offline on any modern tablet.'],
-                ['Who maintains it after launch?', 'Either your team using the runbook and CMS, or the optional monthly retainer.'],
+                ['Who maintains it after launch?', 'Either your team using the runbook and CMS, or an ongoing support arrangement — your call.'],
               ].map(([q, a]) => (
                 <div key={q} className="rounded-xl border border-line bg-panel p-4">
                   <div className="text-[13px] font-bold">{q}</div>
@@ -416,7 +429,7 @@ export default function Docs() {
             <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-bolt">Next step</div>
             <div className="mt-2 text-[16px] font-extrabold">Book the 45-minute scoping call.</div>
             <p className="mt-1.5 max-w-xl text-[12px] leading-relaxed text-white/60">
-              We'll confirm SKUs, dealer tiers, shipping rules and the launch window — then Phase 1 starts the same week.
+              We'll confirm SKUs, dealer tiers, shipping rules and the logins each team needs — then start with the catalogue and design system.
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               <Link to="/pitch" className="btn-primary btn-sm">Open the deck</Link>
@@ -425,7 +438,7 @@ export default function Docs() {
           </div>
 
           <p className="pb-10 text-[11px] text-white/25">
-            Prepared for Thunder Mounts Garage Systems LLC · Demo build · All data fictional · {money(0).replace('$0', 'No payment')} is processed anywhere in this demo.
+            Prepared for Thunder Mounts Garage Systems LLC · Demo build · All data is fictional · no payment is processed anywhere in this demo.
           </p>
         </article>
       </div>

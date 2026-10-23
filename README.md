@@ -21,9 +21,9 @@ and no payment is processed.
 | `/checkout` | Checkout | Contact → shipping → payment → confirmation |
 | `/account` | Customer dashboard | Orders, tracking, garage profile, installs, support |
 | `/dealer` | Dealer portal | Dashboard, orders, quotes, price list, inventory, jobs, terms |
-| `/admin` | Owner console | KPIs, orders, inventory, dealers, installs, CMS, team & audit |
+| `/admin` | Owner console | KPIs, action centre, orders, inventory, dealers, installs, CMS, team & audit |
 | `/field` | Installer app | Route, checklist, photos, signature, offline state |
-| `/pitch` | Proposal deck | 14 slides, arrow-key navigation |
+| `/pitch` | Proposal deck | 13 slides, arrow-key navigation |
 | `/docs` | Scope document | Feature matrix, data model, acceptance criteria, FAQ |
 | `/today` | Current site audit | Side-by-side comparison of what exists today |
 
@@ -90,6 +90,6 @@ product and job photography in production.
 ## Notes for the client conversation
 
 - The `/today` page compares the current thundermounts.com experience with the proposed one.
-- The `/pitch` deck is the recommended walk-through order: problem → vision → each surface → plan → investment.
+- The `/pitch` deck is the recommended walk-through order: problem → vision → each surface → admin actions → outcomes → technology → next steps.
 - The `/docs` page is the written spec to leave behind after the meeting.
 - All numbers (revenue, dealers, orders) are illustrative sample data.

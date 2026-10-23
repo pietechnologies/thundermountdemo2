@@ -592,36 +592,123 @@ export const gaps = [
   },
 ]
 
-export const phases = [
+// ---------------------------------------------------------------------------
+// Admin actions — what the owner / staff can actually do in the console.
+// Used by the proposal deck, the scope document and the Action Centre.
+// ---------------------------------------------------------------------------
+export type ActionGroup = {
+  id: string
+  group: string
+  blurb: string
+  actions: { name: string; detail: string; guarded?: boolean }[]
+}
+
+export const adminActions: ActionGroup[] = [
   {
-    n: '01',
-    weeks: 'Weeks 1–3',
-    title: 'Foundation & storefront',
-    items: ['Design system + brand refresh', 'Product catalogue & fitment schema', 'Storefront, PDP, measure-to-mount tool', 'Cart, checkout, shipping rules', 'Migrate 19 products + content'],
+    id: 'orders',
+    group: 'Orders & payments',
+    blurb: 'Run the whole order from creation to refund without leaving the console.',
+    actions: [
+      { name: 'Create a manual order', detail: 'Phone or trade order — pick the customer, apply dealer pricing, take payment later.' },
+      { name: 'Edit line items', detail: 'Swap a kit size, change quantity, or add a finish ring after the order is placed.' },
+      { name: 'Apply a discount', detail: 'Percentage, fixed amount or a one-off goodwill credit with a required reason.' },
+      { name: 'Capture or refund a payment', detail: 'Full or partial refund to the original card, with QuickBooks synced automatically.' },
+      { name: 'Void or cancel an order', detail: 'Restocks inventory and releases the credit hold in the same action.' },
+      { name: 'Add tracking and split shipments', detail: 'Multiple boxes, multiple carriers, customer notified on save.' },
+      { name: 'Resend invoice or receipt', detail: 'Email or SMS a fresh copy in one click.' },
+      { name: 'Issue an RMA', detail: 'Return authorisation with a prepaid label and the reason code attached.' },
+    ],
   },
   {
-    n: '02',
-    weeks: 'Weeks 4–6',
-    title: 'Accounts & commerce',
-    items: ['Customer accounts & garage profiles', 'Order history, tracking, reorders', 'Payments, tax, returns', 'Email/SMS lifecycle', 'SEO & analytics baseline'],
+    id: 'inventory',
+    group: 'Inventory & pricing',
+    blurb: 'One stock pool shared by the store, dealers and the marketplace.',
+    actions: [
+      { name: 'Adjust stock', detail: 'Cycle count, damage or receiving correction — every change is logged with a reason.' },
+      { name: 'Set reorder points', detail: 'Per-SKU thresholds with automatic low-stock alerts.' },
+      { name: 'Raise a purchase order', detail: 'Send a PO to the powder coater or supplier and track it to receipt.' },
+      { name: 'Transfer between locations', detail: 'Move units from the warehouse to a dealer or into truck stock.' },
+      { name: 'Bulk price change', detail: 'Update list, sale or trade price across a category with an effective date.' },
+      { name: 'Add a new product', detail: 'SKU, fitment fields, photos, contents, install time and SEO in one form.' },
+      { name: 'Pause or hide a SKU', detail: 'Take an item off the storefront without deleting its history.' },
+    ],
   },
   {
-    n: '03',
-    weeks: 'Weeks 7–9',
-    title: 'Dealer portal',
-    items: ['Dealer application & approval flow', 'Tiered pricing, Net 30 credit', 'Quotes, POs, bulk ordering', 'Co-branded catalogues', 'Lead routing by ZIP'],
+    id: 'dealers',
+    group: 'Dealers & leads',
+    blurb: 'Approve the network, set the terms, and make sure no lead goes cold.',
+    actions: [
+      { name: 'Approve or reject an application', detail: 'Review documents, then create the dealer account and portal login in one step.' },
+      { name: 'Set tier and discount', detail: 'Silver, Gold or Platinum — pricing updates everywhere at once.' },
+      { name: 'Set credit limit and terms', detail: 'Net 30 amount, hold status and a full statement history.' },
+      { name: 'Assign a rep', detail: 'Route the account to a named dealer-success manager.' },
+      { name: 'Map ZIP codes', detail: 'Control which dealer receives store-locator leads, with territory overlap rules.' },
+      { name: 'Reassign a lead', detail: 'Move a quote to another dealer or back to the office if it is not picked up.' },
+      { name: 'Suspend a dealer', detail: 'Immediately blocks ordering while keeping read-only history.' },
+      { name: 'Invite dealer users', detail: 'Add an owner, billing and installer login under the dealer account.' },
+    ],
   },
   {
-    n: '04',
-    weeks: 'Weeks 10–12',
-    title: 'Operations & field',
-    items: ['Admin console & roles', 'Inventory sync', 'Install scheduling & dispatch', 'Installer mobile app', 'Owner analytics dashboard'],
+    id: 'installs',
+    group: 'Installations',
+    blurb: 'Schedule, dispatch and close out every job in the network.',
+    actions: [
+      { name: 'Schedule a job', detail: 'Pick a date, a two-hour window and the kit the truck needs to carry.' },
+      { name: 'Assign or reassign a technician', detail: 'Drag a job between crews; the installer app updates instantly.' },
+      { name: 'Reschedule with the customer', detail: 'Sends SMS and email, and updates the customer dashboard.' },
+      { name: 'Review job photos and signature', detail: 'Approve the close-out or send it back with a note.' },
+      { name: 'Close out and invoice', detail: 'Draws stock from the truck and raises the final invoice.' },
+      { name: 'Issue a change order', detail: 'Add work found on site — extra mount, second door — without breaking the original quote.' },
+    ],
   },
   {
-    n: '05',
-    weeks: 'Weeks 13–14',
-    title: 'Launch & handover',
-    items: ['QA, accessibility, performance', 'Data migration & redirects', 'Training + recorded SOPs', 'Go-live & hypercare', '30-day optimisation'],
+    id: 'content',
+    group: 'Website content',
+    blurb: 'The team edits the site; no developer and no ticket queue.',
+    actions: [
+      { name: 'Edit the homepage hero', detail: 'Headline, sub-headline, image, CTAs and the announcement bar.' },
+      { name: 'Publish or unpublish a page', detail: 'Draft, preview, then publish — with a revision history you can roll back.' },
+      { name: 'Edit product copy and specs', detail: 'Fitment, contents, install time and images, live on the storefront.' },
+      { name: 'Moderate reviews', detail: 'Approve, reply to or hide a review; verified-purchase badges are automatic.' },
+      { name: 'Update the portfolio', detail: 'Upload job photos with the SKUs used and the dealer credited.' },
+      { name: 'Manage SEO and redirects', detail: 'Meta titles, descriptions, alt text and 301s in one panel.' },
+    ],
+  },
+  {
+    id: 'customers',
+    group: 'Customers',
+    blurb: 'Support the person, not just the order.',
+    actions: [
+      { name: 'View a full customer record', detail: 'Orders, garage profile, measurements, installs and ticket history together.' },
+      { name: 'Issue store credit or points', detail: 'Goodwill credit that applies at their next checkout.' },
+      { name: 'Merge duplicate accounts', detail: 'Combines order history and saved garages without losing either.' },
+      { name: 'Send a password reset', detail: 'One click, logged against the customer record.' },
+      { name: 'Export or erase customer data', detail: 'Privacy requests handled without a database query.' },
+    ],
+  },
+  {
+    id: 'team',
+    group: 'Team & security',
+    blurb: 'Least-privilege access, and proof of who changed what.',
+    actions: [
+      { name: 'Invite a team member', detail: 'Assign one of the permission sets — owner, ops, dealer success, content, installer.' },
+      { name: 'Change a role', detail: 'Takes effect at their next request; sessions can be revoked immediately.' },
+      { name: 'Revoke access', detail: 'Remove a staff member or a departing dealer user without touching their history.' },
+      { name: 'Review the audit trail', detail: 'Every price, stock, refund and permission change with actor, time and diff.' },
+      { name: 'Enable two-factor authentication', detail: 'Required for admin and owner accounts.' },
+    ],
+  },
+  {
+    id: 'reports',
+    group: 'Reports & exports',
+    blurb: 'Answers on demand — and out to a spreadsheet when needed.',
+    actions: [
+      { name: 'Export orders, stock or dealers', detail: 'Filtered CSV or Excel, respecting the current view.' },
+      { name: 'Run a sales tax report', detail: 'By jurisdiction and period, ready for the accountant.' },
+      { name: 'Pull a dealer statement', detail: 'Generate and email a Net 30 statement per dealer.' },
+      { name: 'Compare channels', detail: 'Dealer, direct and marketplace side by side for any date range.' },
+      { name: 'Schedule a weekly digest', detail: 'Revenue, stock alerts and open tickets in one email.' },
+    ],
   },
 ]
 
@@ -639,10 +726,10 @@ export const integrations = [
 ]
 
 export const kpisForPitch = [
-  { label: 'Weeks to launch', value: '14' },
-  { label: 'Surfaces delivered', value: '6' },
-  { label: 'Manual hours saved / wk', value: '~9' },
+  { label: 'Connected surfaces', value: '6' },
   { label: 'Product SKUs migrated', value: '19' },
+  { label: 'Admin actions in console', value: '50+' },
+  { label: 'Stock pools unified', value: '1' },
 ]
 
 export const statusColor: Record<string, string> = {

@@ -54,7 +54,7 @@ const publicPages: [string, React.ReactElement, RegExp][] = [
   ['/installers', <Installers />, /Certified installers/i],
   ['/our-story', <Story />, /missing piece/i],
   ['/checkout', <Checkout />, /cart is empty/i],
-  ['/pitch', <Pitch />, /CONNECTED/i],
+  ['/pitch', <Pitch />, /THE CONNECTED/i],
   ['/docs', <Docs />, /Scope & platform specification/i],
   ['/today', <Today />, /what it becomes/i],
 ]
@@ -110,6 +110,14 @@ describe('gated portals', () => {
     localStorage.setItem('tm_session', 'admin')
     renderAt('/admin', <Admin />)
     expect(screen.getByText(/Good morning/i)).toBeTruthy()
+  })
+  it('admin action centre is reachable and lists actions', async () => {
+    localStorage.setItem('tm_session', 'admin')
+    renderAt('/admin', <Admin />)
+    const btn = screen.getByRole('button', { name: /Action centre/i })
+    btn.click()
+    expect(await screen.findByRole('heading', { name: /Action centre/i })).toBeTruthy()
+    expect(screen.getAllByRole('button', { name: /^Run$/i }).length).toBeGreaterThan(10)
   })
   it('field app renders', () => {
     renderAt('/field', <Field />)

@@ -57,27 +57,26 @@ Findings from the current thundermounts.com build:
 
 ## 3. Scope of work
 
-### Phase 1 — Foundation & storefront (weeks 1–3)
-Design system and brand refresh; product catalogue and fitment schema; storefront, product pages,
-measure-to-mount tool; cart, checkout and shipping rules; migration of the 19 products and content.
+Six connected areas. Each is demoed and signed off on its own before the next begins.
 
-### Phase 2 — Accounts & commerce (weeks 4–6)
-Customer accounts and garage profiles; order history, tracking and reorders; payments, tax and returns;
-email/SMS lifecycle; SEO and analytics baseline.
+**01 · Storefront & marketing site** — design system and brand refresh; product catalogue and fitment
+schema; measure-to-mount tool on every product page; cart, checkout and shipping rules; portfolio, blog,
+reviews and SEO.
 
-### Phase 3 — Dealer portal (weeks 7–9)
-Dealer application and approval; tiered pricing and Net 30 credit; quotes, POs and bulk ordering;
-co-branded catalogues; lead routing by ZIP code. Piloted with two dealers.
+**02 · Customer accounts & commerce** — accounts and garage profiles; order history, tracking and
+reorders; payments, tax and returns; email and SMS lifecycle; analytics baseline.
 
-### Phase 4 — Operations & field (weeks 10–12)
-Admin console and roles; inventory sync; install scheduling and dispatch; installer mobile app;
-owner analytics. Field trial with the existing crew.
+**03 · Dealer portal** — dealer application and approval; tiered pricing and Net 30 credit; quotes, POs
+and bulk ordering; co-branded catalogues; lead routing by ZIP code.
 
-### Phase 5 — Launch & handover (weeks 13–14)
-QA, accessibility and performance; data migration and redirects; training and recorded SOPs;
-go-live and 30 days of hypercare.
+**04 · Owner console** — orders, refunds and RMAs; inventory and price control; dealer network
+management; install scheduling and dispatch; website CMS, roles and audit trail.
 
-**Cadence:** a 30-minute clickable demo every Friday. No phase is invoiced until it is signed off.
+**05 · Installer app** — route and job detail; guided checklist; photo evidence and signature; offline
+operation with sync; job close-out and stock draw.
+
+**06 · Reporting & integrations** — channel and dealer reporting; SKU performance and funnel; payments,
+accounting and shipping; email, SMS and CRM; exports and scheduled digests.
 
 ---
 
@@ -103,7 +102,51 @@ go-live and 30 days of hypercare.
 
 ---
 
-## 5. Technical approach
+## 5. Admin actions
+
+What staff can do in the owner console without a developer, a spreadsheet or an email to the office.
+Every action is role-checked and written to the audit trail. All of these are clickable in the demo's
+**Action Centre** at `/admin`.
+
+### Orders & payments
+Create a manual order · edit line items · apply a discount · capture or refund a payment · void or cancel
+an order · add tracking and split shipments · resend invoice or receipt · issue an RMA.
+
+### Inventory & pricing
+Adjust stock · set reorder points · raise a purchase order · transfer between locations · bulk price
+change · add a new product · pause or hide a SKU.
+
+### Dealers & leads
+Approve or reject an application · set tier and discount · set credit limit and terms · assign a rep ·
+map ZIP codes · reassign a lead · suspend a dealer · invite dealer users.
+
+### Installations
+Schedule a job · assign or reassign a technician · reschedule with the customer · review job photos and
+signature · close out and invoice · issue a change order.
+
+### Website content
+Edit the homepage hero · publish or unpublish a page · edit product copy and specs · moderate reviews ·
+update the portfolio · manage SEO and redirects.
+
+### Customers
+View a full customer record · issue store credit or points · merge duplicate accounts · send a password
+reset · export or erase customer data.
+
+### Team & security
+Invite a team member · change a role · revoke access · review the audit trail · enable two-factor
+authentication.
+
+### Reports & exports
+Export orders, stock or dealers · run a sales tax report · pull a dealer statement · compare channels ·
+schedule a weekly digest.
+
+**Guarded by design:** refunds above $1,000 need owner approval, stock adjustments require a reason code,
+dealer credit limits are verified before Net 30 orders, and two-factor is required for admin and owner
+accounts.
+
+---
+
+## 6. Technical approach
 
 - **Frontend:** Next.js + TypeScript, server rendering for SEO, edge caching for speed.
 - **Field app:** installable PWA — no app-store review, works offline, syncs on reconnect.
@@ -117,7 +160,7 @@ go-live and 30 days of hypercare.
 
 ---
 
-## 6. Acceptance criteria
+## 7. Acceptance criteria
 
 1. A guest can find the right mount size in under 60 seconds without contacting support.
 2. A customer can see order history, tracking and saved measurements in one place.
@@ -126,38 +169,32 @@ go-live and 30 days of hypercare.
 5. Staff can edit the homepage hero, publish, and see it live without a developer.
 6. An installer can complete a job offline; photos and signature sync when reconnected.
 7. The owner dashboard reconciles to order data to the cent, split by channel and dealer.
-8. Lighthouse: 90+ performance and 95+ accessibility on the five primary public pages.
-9. Every money, stock and permission action appears in the audit trail.
+8. Every admin action in section 5 is available to the right role and blocked for the wrong one.
+9. Lighthouse: 90+ performance and 95+ accessibility on the five primary public pages.
+10. Every money, stock and permission action appears in the audit trail.
 
 ---
 
-## 7. Engagement options
+## 8. What is included
 
-| Option | Scope | Timeline | Indicative investment |
-|--------|-------|----------|-----------------------|
-| Storefront first | Phases 1–2 | 6 weeks | $18k – $26k |
-| **Full platform (recommended)** | Phases 1–5, all six surfaces | 14 weeks | $48k – $62k |
-| Platform + growth retainer | Hosting, CRO, backlog, content | Ongoing | $6k – $9k / month |
+Design system and all six surfaces · content and catalogue migration · payment, tax and shipping setup ·
+analytics, roles and audit trail · training with recorded SOPs · repository, hosting and account handover.
 
-Indicative ranges; final quote confirmed after a 45-minute scoping call.
-
-**Included:** design system, all surfaces, content and catalogue migration, payment/tax/shipping setup,
-analytics, roles and audit trail, training, and 30 days of hypercare.
-
-**Not included:** native iOS/Android apps (the PWA covers field use), a custom ERP, paid media management,
-product photography, and a 3D configurator.
+**Not included:** native iOS/Android apps (the PWA covers field use), a custom ERP, payroll and full
+accounting, paid media management, product photography, and a 3D configurator.
 
 ---
 
-## 8. Next steps
+## 9. Next steps
 
-1. **Scoping call (45 min)** — confirm SKUs, dealer tiers, shipping rules, dealer list and launch window.
-2. **Choose the scope** — storefront first, or the full platform.
-3. **Kickoff** — design system in week one; first clickable demo at the end of week two.
+1. **Scoping call** — confirm SKUs, dealer tiers, shipping rules and which logins each team needs.
+2. **Choose the scope** — storefront first, or every surface at once. The catalogue and design system come
+   first either way.
+3. **Kickoff** — we start with your catalogue, photography and dealer list, then demo the first surface.
 
 ---
 
-## 9. Demo access
+## 10. Demo access
 
 The demo is a static build hosted on GitHub Pages. All data is fictional and no payment is processed.
 
@@ -167,7 +204,8 @@ The demo is a static build hosted on GitHub Pages. All data is fictional and no 
 | Dealer | orders@summitgaragedoors.com | demo1234 |
 | Owner / admin | gustavo@thundermounts.com | demo1234 |
 
-Use the surface switcher in the black bar at the top of the demo to jump between all six surfaces.
+Use the surface switcher in the black bar at the top of the demo. The owner console's **Action centre**
+lists every action from section 5 with a working "Run" button.
 
 ---
 

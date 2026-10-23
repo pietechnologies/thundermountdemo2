@@ -2,6 +2,7 @@ import { useState } from 'react'
 import {
   LayoutDashboard, ShoppingCart, Boxes, Handshake, Wrench, Users, FileEdit, ShieldCheck,
   TrendingUp, Download, Plus, Search, Check, X, ArrowUpRight, AlertTriangle, Star, Eye, Globe,
+  Command, Lock, Layers, RotateCcw, PackageCheck, BadgeCheck,
 } from 'lucide-react'
 import {
   BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, CartesianGrid, PieChart, Pie, Cell, AreaChart, Area,
@@ -10,12 +11,13 @@ import { PortalShell, PortalLogin, Panel, Table } from '../components/Portal'
 import { Badge, Stat, Progress } from '../components/ui'
 import {
   adminOrders, dealers, products, money, revenueSeries, channelMix, topSkus, regionSplit, funnel,
-  applications, tickets, team, installs,
+  applications, tickets, team, installs, adminActions,
 } from '../data'
 import { useStore } from '../store'
 
 const nav = [
   { key: 'overview', label: 'Overview', icon: <LayoutDashboard className="h-4 w-4" /> },
+  { key: 'actions', label: 'Action centre', icon: <Command className="h-4 w-4" />, group: 'Commerce' },
   { key: 'orders', label: 'Orders', icon: <ShoppingCart className="h-4 w-4" />, badge: 4, group: 'Commerce' },
   { key: 'inventory', label: 'Inventory', icon: <Boxes className="h-4 w-4" />, group: 'Commerce' },
   { key: 'customers', label: 'Customers', icon: <Users className="h-4 w-4" />, group: 'Commerce' },
@@ -61,6 +63,7 @@ export default function Admin() {
       }
     >
       {tab === 'overview' && <Overview onGo={setTab} />}
+      {tab === 'actions' && <ActionCentre />}
       {tab === 'orders' && <Orders />}
       {tab === 'inventory' && <Inventory />}
       {tab === 'customers' && <Customers />}
@@ -223,6 +226,140 @@ function Overview({ onGo }: { onGo: (t: string) => void }) {
             ))}
           </div>
         </Panel>
+      </div>
+    </div>
+  )
+}
+
+
+function ActionCentre() {
+  const { notify } = useStore()
+  const [q, setQ] = useState('')
+  const [gi, setGi] = useState('all')
+  const [ran, setRan] = useState<string[]>([])
+  const [log, setLog] = useState<{ name: string; at: string }[]>([
+    { name: 'Approved dealer application AP-117', at: '12m ago' },
+    { name: 'Refunded order TM-10424', at: '2h ago' },
+    { name: 'Adjusted TMGTL-29 stock +12', at: '5h ago' },
+    { name: 'Published homepage hero', at: '8h ago' },
+  ])
+
+  const groups = adminActions.filter((g) => gi === 'all' || g.id === gi)
+  const term = q.trim().toLowerCase()
+  const total = adminActions.reduce((n, g) => n + g.actions.length, 0)
+
+  const run = (name: string) => {
+    setRan((r) => (r.includes(name) ? r : [...r, name]))
+    setLog((l) => [{ name, at: 'just now' }, ...l].slice(0, 6))
+    notify(`${name} — done`)
+  }
+
+  return (
+    <div className="space-y-5">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-extrabold tracking-tight">Action centre</h1>
+          <p className="text-[13px] text-mist">Everything staff can do in the console — {total} actions, all role-checked and audit logged.</p>
+        </div>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-white/30" />
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search actions" className="input py-2 pl-8 text-[12px]" />
+        </div>
+      </div>
+
+      <div className="no-bar flex gap-1.5 overflow-x-auto pb-1">
+        <button
+          onClick={() => setGi('all')}
+          className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold transition ${gi === 'all' ? 'bg-bolt text-black' : 'border border-line text-white/55 hover:text-white'}`}
+        >
+          All {total}
+        </button>
+        {adminActions.map((g) => (
+          <button
+            key={g.id}
+            onClick={() => setGi(g.id)}
+            className={`shrink-0 rounded-full px-3 py-1.5 text-[11px] font-semibold transition ${gi === g.id ? 'bg-bolt text-black' : 'border border-line text-white/55 hover:text-white'}`}
+          >
+            {g.group} <span className={gi === g.id ? 'text-black/50' : 'text-white/25'}>{g.actions.length}</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="grid gap-4 xl:grid-cols-[1fr_320px]">
+        <div className="space-y-4">
+          {groups.map((g) => {
+            const actions = g.actions.filter((a) => !term || (a.name + a.detail).toLowerCase().includes(term))
+            if (actions.length === 0) return null
+            return (
+              <Panel key={g.id} title={g.group} action={<span className="text-[11px] text-white/30">{g.actions.length} actions</span>}>
+                <p className="mb-3 text-[12px] text-white/40">{g.blurb}</p>
+                <div className="divide-y divide-line/70">
+                  {actions.map((a) => {
+                    const isRan = ran.includes(a.name)
+                    return (
+                      <div key={a.name} className="flex items-start gap-3 py-2.5">
+                        <span className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md ${isRan ? 'bg-emerald-500/15 text-emerald-400' : 'bg-white/[0.05] text-white/40'}`}>
+                          {isRan ? <Check className="h-3.5 w-3.5" strokeWidth={3} /> : <Layers className="h-3 w-3" />}
+                        </span>
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5 text-[12px] font-semibold">
+                            {a.name}
+                            {a.guarded && <Lock className="h-3 w-3 text-amber-400/80" />}
+                          </div>
+                          <div className="text-[11px] leading-relaxed text-white/40">{a.detail}</div>
+                        </div>
+                        <button
+                          onClick={() => run(a.name)}
+                          className={`shrink-0 rounded-lg border px-2.5 py-1 text-[10px] font-bold transition ${
+                            isRan ? 'border-emerald-500/30 text-emerald-400' : 'border-line text-white/60 hover:border-bolt/60 hover:text-bolt'
+                          }`}
+                        >
+                          {isRan ? 'Done' : 'Run'}
+                        </button>
+                      </div>
+                    )
+                  })}
+                </div>
+              </Panel>
+            )
+          })}
+          {groups.every((g) => g.actions.filter((a) => !term || (a.name + a.detail).toLowerCase().includes(term)).length === 0) && (
+            <div className="card p-10 text-center text-sm text-mist">No actions match “{q}”.</div>
+          )}
+        </div>
+
+        <div className="space-y-4">
+          <Panel title="Session log" action={<span className="flex items-center gap-1 text-[10px] text-emerald-400"><BadgeCheck className="h-3 w-3" /> live</span>}>
+            <div className="space-y-2">
+              {log.map((l, i) => (
+                <div key={`${l.name}-${i}`} className="flex items-start gap-2">
+                  <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-bolt/70" />
+                  <div className="flex-1 text-[11px] leading-snug text-white/60">{l.name}</div>
+                  <span className="shrink-0 text-[10px] text-white/25">{l.at}</span>
+                </div>
+              ))}
+            </div>
+            <p className="mt-3 border-t border-line pt-3 text-[10px] leading-relaxed text-white/30">
+              In production this is the permanent audit trail: actor, action, before/after values and timestamp.
+            </p>
+          </Panel>
+
+          <Panel title="Guarded actions">
+            <div className="space-y-2 text-[11px] text-white/50">
+              <div className="flex items-center gap-2"><Lock className="h-3 w-3 text-amber-400" /> Refunds above $1,000 need owner approval</div>
+              <div className="flex items-center gap-2"><RotateCcw className="h-3 w-3 text-amber-400" /> Stock adjustments require a reason code</div>
+              <div className="flex items-center gap-2"><PackageCheck className="h-3 w-3 text-amber-400" /> Dealer credit limits verified before Net 30 orders</div>
+              <div className="flex items-center gap-2"><ShieldCheck className="h-3 w-3 text-amber-400" /> Two-factor required for admin and owner</div>
+            </div>
+          </Panel>
+
+          <Panel title="Not in the console">
+            <p className="text-[11px] leading-relaxed text-white/40">
+              Deliberately excluded so the team stays focused: payroll, full accounting, and marketing automation
+              beyond the Klaviyo integration. Those stay in the tools that already do them well.
+            </p>
+          </Panel>
+        </div>
       </div>
     </div>
   )

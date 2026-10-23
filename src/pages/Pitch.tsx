@@ -3,9 +3,9 @@ import { Link, useNavigate } from 'react-router-dom'
 import {
   ArrowRight, ArrowLeft, X, Zap, ShoppingCart, User, Handshake, LayoutDashboard, Wrench,
   Check, AlertTriangle, TrendingUp, Clock, Globe, Lock, Smartphone, Database, Cloud, CreditCard,
-  Package, Mail, MessageSquare, BarChart3, Play, ChevronRight, Sparkles, Target, Layers, MapPin,
+  Package, Mail, MessageSquare, BarChart3, Play, ChevronRight, Sparkles, Target, Layers, MapPin, ShieldCheck,
 } from 'lucide-react'
-import { gaps, phases, integrations, kpisForPitch, money } from '../data'
+import { gaps, integrations, kpisForPitch, adminActions } from '../data'
 
 type Slide = { id: string; label: string; render: () => React.ReactNode }
 
@@ -13,7 +13,7 @@ const surfaceCards = [
   { icon: <ShoppingCart className="h-5 w-5" />, title: 'Storefront', desc: 'Catalogue, fitment finder, checkout, installer locator', to: '/shop', tag: 'Public' },
   { icon: <User className="h-5 w-5" />, title: 'Customer account', desc: 'Orders, garage profile, installs, support', to: '/account', tag: 'Signed in' },
   { icon: <Handshake className="h-5 w-5" />, title: 'Dealer portal', desc: 'Trade pricing, quotes, stock, credit terms', to: '/dealer', tag: 'Trade' },
-  { icon: <LayoutDashboard className="h-5 w-5" />, title: 'Owner console', desc: 'Orders, inventory, dealers, content, analytics', to: '/admin', tag: 'Internal' },
+  { icon: <LayoutDashboard className="h-5 w-5" />, title: 'Owner console', desc: 'Action centre, inventory, dealers, content, analytics', to: '/admin', tag: 'Internal' },
   { icon: <Smartphone className="h-5 w-5" />, title: 'Installer app', desc: 'Route, checklist, photos, signature, close-out', to: '/field', tag: 'Field' },
   { icon: <Globe className="h-5 w-5" />, title: 'Marketing site', desc: 'Story, portfolio, blog, SEO, content CMS', to: '/our-story', tag: 'Public' },
 ]
@@ -285,11 +285,16 @@ const slides: Slide[] = [
     ),
   },
   {
+    id: 'admin-actions',
+    label: 'Admin actions',
+    render: () => <AdminActionsSlide />,
+  },
+  {
     id: 'compare',
     label: 'Before / after',
     render: () => (
       <SlideShell>
-        <Eyebrow>09 · Before and after</Eyebrow>
+        <Eyebrow>10 · Before and after</Eyebrow>
         <h2 className="text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl">The difference, side by side.</h2>
 
         <div className="mt-8 overflow-hidden rounded-2xl border border-line">
@@ -317,7 +322,7 @@ const slides: Slide[] = [
     label: 'Outcomes',
     render: () => (
       <SlideShell>
-        <Eyebrow>10 · What it changes</Eyebrow>
+        <Eyebrow>11 · What it changes</Eyebrow>
         <h2 className="max-w-3xl text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl">
           Fewer hours on admin. More dealers without more headcount.
         </h2>
@@ -369,7 +374,7 @@ const slides: Slide[] = [
     label: 'Technology',
     render: () => (
       <SlideShell>
-        <Eyebrow>11 · Technology</Eyebrow>
+        <Eyebrow>12 · Technology</Eyebrow>
         <h2 className="max-w-3xl text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl">
           Boring, proven infrastructure — chosen so it doesn't need a team.
         </h2>
@@ -412,118 +417,20 @@ const slides: Slide[] = [
     ),
   },
   {
-    id: 'plan',
-    label: 'Plan',
-    render: () => (
-      <SlideShell>
-        <Eyebrow>12 · Delivery plan</Eyebrow>
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <h2 className="max-w-2xl text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl">
-            14 weeks, five phases, weekly demos.
-          </h2>
-          <div className="flex gap-2 text-[11px]">
-            <span className="chip">No big-bang launch</span>
-            <span className="chip">You approve each phase</span>
-          </div>
-        </div>
-
-        <div className="mt-9 space-y-3">
-          {phases.map((p) => (
-            <div key={p.n} className="grid gap-3 rounded-2xl border border-line bg-panel p-5 sm:grid-cols-[80px_1fr]">
-              <div>
-                <div className="text-2xl font-extrabold text-white/15">{p.n}</div>
-                <div className="text-[10px] font-bold uppercase tracking-wider text-bolt">{p.weeks}</div>
-              </div>
-              <div>
-                <div className="text-[15px] font-bold">{p.title}</div>
-                <div className="mt-2 flex flex-wrap gap-1.5">
-                  {p.items.map((i) => (
-                    <span key={i} className="rounded-md border border-line bg-white/[0.02] px-2 py-1 text-[11px] text-white/50">{i}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </SlideShell>
-    ),
-  },
-  {
-    id: 'investment',
-    label: 'Investment',
-    render: () => (
-      <SlideShell>
-        <Eyebrow>13 · Engagement options</Eyebrow>
-        <h2 className="max-w-3xl text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl">
-          Start where it hurts most, or do the whole thing.
-        </h2>
-        <p className="mt-3 text-[13px] text-mist">Indicative ranges — final quote confirmed after a 45-minute scoping call.</p>
-
-        <div className="mt-8 grid gap-4 lg:grid-cols-3">
-          {[
-            {
-              name: 'Storefront first',
-              price: '$18k – $26k',
-              time: '6 weeks',
-              desc: 'The site, catalogue and fitment tool. Immediate conversion win.',
-              items: ['Design system + storefront', 'Catalogue & fitment finder', 'Checkout + shipping/tax', 'Customer accounts', 'Content migration + SEO'],
-              cta: 'Phase 1–2',
-            },
-            {
-              name: 'Full platform',
-              price: '$48k – $62k',
-              time: '14 weeks',
-              desc: 'Everything in this demo — all six surfaces, one system.',
-              items: ['Everything in Storefront', 'Dealer portal + trade pricing', 'Owner console & roles', 'Installer app', 'Analytics, integrations, training'],
-              cta: 'Recommended',
-              featured: true,
-            },
-            {
-              name: 'Platform + growth',
-              price: '$6k – $9k / mo',
-              time: 'Ongoing',
-              desc: 'We keep improving it after launch instead of handing over a PDF.',
-              items: ['Hosting & monitoring', 'Monthly CRO experiments', 'New features backlog', 'Content & SEO support', 'Priority support'],
-              cta: 'Retainer',
-            },
-          ].map((p) => (
-            <div key={p.name} className={`relative rounded-2xl border p-6 ${p.featured ? 'border-bolt/60 bg-bolt/[0.05]' : 'border-line bg-panel'}`}>
-              {p.featured && (
-                <div className="absolute -top-2.5 left-6 rounded-full bg-bolt px-2.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-black">
-                  Recommended
-                </div>
-              )}
-              <div className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/35">{p.cta}</div>
-              <h3 className="mt-2 text-xl font-extrabold">{p.name}</h3>
-              <div className="mt-2 text-2xl font-extrabold text-bolt">{p.price}</div>
-              <div className="text-[11px] text-white/35">{p.time}</div>
-              <p className="mt-3 text-[12px] leading-relaxed text-white/50">{p.desc}</p>
-              <ul className="mt-4 space-y-1.5">
-                {p.items.map((i) => (
-                  <li key={i} className="flex gap-2 text-[12px] text-white/65"><Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-bolt" /> {i}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </SlideShell>
-    ),
-  },
-  {
     id: 'next',
     label: 'Next steps',
     render: () => (
       <SlideShell>
-        <Eyebrow>14 · Next steps</Eyebrow>
+        <Eyebrow>13 · Next steps</Eyebrow>
         <h2 className="max-w-3xl text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl">
           Three decisions and we can start Monday.
         </h2>
 
         <div className="mt-9 grid gap-4 lg:grid-cols-3">
           {[
-            ['01', 'Scoping call', '45 minutes. We confirm SKUs, pricing tiers, shipping rules and the dealer list.'],
-            ['02', 'Pick the scope', 'Storefront first or the full platform. Either way, Phase 1 starts the same week.'],
-            ['03', 'Kickoff', 'Design system in week one, first demo at the end of week two.'],
+            ['01', 'Scoping call', 'We confirm SKUs, dealer tiers, shipping rules and who needs which login.'],
+            ['02', 'Pick the scope', 'Storefront first, or every surface at once. The catalogue and design system come first either way.'],
+            ['03', 'Kickoff', 'We start with your catalogue, photography and dealer list — then demo the first surface.'],
           ].map(([n, t, d]) => (
             <div key={n} className="rounded-2xl border border-line bg-panel p-6">
               <div className="text-[11px] font-bold text-bolt">{n}</div>
@@ -564,6 +471,86 @@ const slides: Slide[] = [
     ),
   },
 ]
+
+function AdminActionsSlide() {
+  const [gi, setGi] = useState(0)
+  const group = adminActions[gi]
+  const total = adminActions.reduce((n, g) => n + g.actions.length, 0)
+
+  return (
+    <SlideShell>
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <Eyebrow>09 · Inside the console</Eyebrow>
+          <h2 className="max-w-2xl text-3xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl">
+            What the owner can actually do.
+          </h2>
+        </div>
+        <div className="text-right">
+          <div className="text-3xl font-extrabold text-bolt">{total}</div>
+          <div className="text-[10px] uppercase tracking-[0.16em] text-white/35">actions in the console</div>
+        </div>
+      </div>
+      <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-mist">
+        The dashboards are only the read side. These are the actions staff can take without a developer, a
+        spreadsheet, or a phone call to the office. Pick a group to see them.
+      </p>
+
+      <div className="mt-8 grid gap-4 lg:grid-cols-[260px_1fr]">
+        <div className="space-y-1">
+          {adminActions.map((g, i) => (
+            <button
+              key={g.id}
+              onClick={() => setGi(i)}
+              className={`flex w-full items-center gap-2.5 rounded-xl border px-3.5 py-2.5 text-left transition ${
+                i === gi
+                  ? 'border-bolt/60 bg-bolt/[0.08] text-white'
+                  : 'border-transparent text-white/50 hover:border-line hover:bg-white/[0.03] hover:text-white/85'
+              }`}
+            >
+              <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${i === gi ? 'bg-bolt' : 'bg-white/20'}`} />
+              <span className="flex-1 text-[13px] font-semibold">{g.group}</span>
+              <span className={`text-[10px] font-bold ${i === gi ? 'text-bolt' : 'text-white/25'}`}>{g.actions.length}</span>
+            </button>
+          ))}
+        </div>
+
+        <div className="rounded-2xl border border-line bg-panel p-5">
+          <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-line pb-3">
+            <h3 className="text-[15px] font-bold">{group.group}</h3>
+            <span className="text-[11px] text-white/40">{group.blurb}</span>
+          </div>
+          <div className="mt-3 grid gap-1.5 sm:grid-cols-2">
+            {group.actions.map((a, i) => (
+              <div key={a.name} className="group/a rounded-xl border border-transparent px-3 py-2.5 transition hover:border-line hover:bg-white/[0.03]">
+                <div className="flex items-start gap-2">
+                  <span className="mt-0.5 font-mono text-[9px] text-bolt/60">{String(i + 1).padStart(2, '0')}</span>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5 text-[12.5px] font-semibold leading-snug">
+                      {a.name}
+                      {a.guarded && <Lock className="h-3 w-3 text-amber-400/80" />}
+                    </div>
+                    <p className="mt-0.5 text-[11px] leading-relaxed text-white/40">{a.detail}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-line pt-3">
+            <div className="flex flex-wrap gap-1.5">
+              <span className="chip"><ShieldCheck className="h-3 w-3" /> Role-checked</span>
+              <span className="chip"><Check className="h-3 w-3" /> Audit logged</span>
+              <span className="chip"><Database className="h-3 w-3" /> No developer needed</span>
+            </div>
+            <Link to="/admin" className="text-[12px] font-bold text-bolt">
+              Try them in the console →
+            </Link>
+          </div>
+        </div>
+      </div>
+    </SlideShell>
+  )
+}
 
 function Users2() {
   return <User className="h-3 w-3" />
